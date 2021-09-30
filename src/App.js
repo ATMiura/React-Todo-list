@@ -6,6 +6,7 @@ import {Navbar} from "./Components/Navbar";
 import {Alert} from "./Components/Alert";
 import {AlertState} from "./context/alert/AlertState";
 import {FirebaseState} from "./context/firebase/FirebaseState";
+import AppRouter from "./Components/AppRouter";
 
 function App() {
     return (
@@ -15,10 +16,7 @@ function App() {
                     <Navbar/>
                     <div className="container pt-4">
                         <Alert />
-                        <Switch>
-                            <Route path={'/'} exact component={Home} />
-                            <Route path={'/about'} exact component={About} />
-                        </Switch>
+                        <AppRouter/>
                     </div>
                 </BrowserRouter>
             </AlertState>

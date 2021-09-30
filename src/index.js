@@ -4,6 +4,23 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {initializeApp} from 'firebase/app'
+import 'firebase/firestore';
+import 'firebase/auth';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDOHrowop4KruNWXMXGGjR96KZJr-lQXRI",
+    authDomain: "react-todo-login.firebaseapp.com",
+    projectId: "react-todo-login",
+    storageBucket: "react-todo-login.appspot.com",
+    messagingSenderId: "4221066372",
+    appId: "1:4221066372:web:56634d97b2a8aaffff36d1",
+    measurementId: "G-KR9YTB7VLM"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
