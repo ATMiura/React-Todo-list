@@ -1,9 +1,10 @@
-import React, {useReducer} from 'react';
+import React, {useContext, useReducer} from 'react';
 import axios from 'axios';
 import {FirebaseContext} from "./firebaseContext";
 import {firebaseReducer} from "./firebaseReducer";
 import {ADD_NOTE, FETCH_NOTES, REMOVE_NOTE, SHOW_LOADER} from "../types";
-
+import {Context} from "../../index";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 const url = process.env.REACT_APP_DB_URL;
 
@@ -13,13 +14,14 @@ export const FirebaseState = ({children}) => {
         loading: false,
     };
     const [state, dispatch] = useReducer(firebaseReducer, initialState);
+    const {auth} = useContext(Context);
+    const [user] = useAuthState(auth);
 
     const showLoader = () => dispatch({type: SHOW_LOADER});
 
     const fetchNotes = async () => {
         showLoader();
         const res = await axios.get(`${url}/notes.json`);
-        console.log('fetchNotes', res.data);
         const payload = Object.keys(res.data || {}).map(key=>{
             return {
                 ...res.data[key],
@@ -32,11 +34,14 @@ export const FirebaseState = ({children}) => {
 
     const addNote = async title => {
         const note = {
-            title, date: new Date().toJSON()
+            uid: user.uid,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            title,
+            date: new Date().toJSON()
         };
         try{
             const res = await axios.post(`${url}/notes.json`, note);
-            console.log('addNote', res.data);
             const payload ={
                 ...note,
                 id: res.data.name
@@ -60,7 +65,7 @@ export const FirebaseState = ({children}) => {
     };
 
     return (
-        <FirebaseContext.Provider value={{showLoader, addNote, fetchNotes, removeNote, loading: state.loading, notes: state.notes }}>
+        <FirebaseContext.Provider value={{showLoader, addNote, fetchNotes, removeNote, user, loading: state.loading, notes: state.notes }}>
             {children}
         </FirebaseContext.Provider>
     )

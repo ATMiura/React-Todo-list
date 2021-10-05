@@ -1,14 +1,14 @@
-import React from 'react';
+import React, {createContext} from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import {initializeApp} from 'firebase/app'
+import firebase from 'firebase';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-const firebaseConfig = {
+firebase.initializeApp({
     apiKey: "AIzaSyDOHrowop4KruNWXMXGGjR96KZJr-lQXRI",
     authDomain: "react-todo-login.firebaseapp.com",
     projectId: "react-todo-login",
@@ -16,15 +16,21 @@ const firebaseConfig = {
     messagingSenderId: "4221066372",
     appId: "1:4221066372:web:56634d97b2a8aaffff36d1",
     measurementId: "G-KR9YTB7VLM"
-};
+});
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const Context = createContext(null);
+
+const auth = firebase.auth();
+const firestore = firebase.firestore();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <Context.Provider value={{
+        firebase,
+        auth,
+        firestore
+    }}>
+        <App />
+    </Context.Provider>,
   document.getElementById('root')
 );
 

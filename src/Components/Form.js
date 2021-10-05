@@ -3,6 +3,7 @@ import {AlertContext} from "../context/alert/alertContext";
 import {FirebaseContext} from "../context/firebase/firebaseContext";
 
 export const Form = () => {
+
     const [value, setValue] = useState('');
     const alert = useContext(AlertContext);
     const firebase = useContext(FirebaseContext);
@@ -23,15 +24,17 @@ export const Form = () => {
     };
 
     return (
-        <form onSubmit={submitHandler}>
-            <div className="form-group">
-                <input type="text"
-                       className="form-control"
-                       placeholder="Название заметки"
-                       value={value}
-                       onChange={e => setValue(e.target.value)}
-                />
-            </div>
-        </form>
+        <>
+            <form onSubmit={submitHandler}>
+                <div className="form-group">
+                    <input type="text"
+                           className="form-control"
+                           placeholder="Название заметки"
+                           value={value}
+                           onChange={e => setValue(e.target.value)}
+                    />
+                </div>
+            </form>
+        </>
     )
 };

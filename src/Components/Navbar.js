@@ -1,9 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavLink} from "react-router-dom";
-import {LOGIN_ROUTE} from "../utils/consts";
+import {Context} from "../index";
+import {useAuthState} from "react-firebase-hooks/auth";
 
 export const Navbar = () => {
-    const user = true;
+    const {auth} = useContext(Context)
+    const [user] = useAuthState(auth)
 
     return (
         <nav className="navbar navbar-dark navbar-expand-lg bg-primary">
@@ -27,12 +29,10 @@ export const Navbar = () => {
                             <div className="user-avatar">
                                 <i className="bi bi-person"></i>
                             </div>
-                            <div className="user-name">Name</div>
+                            <div className="user-name">{user.displayName}</div>
+                            <button className="btn btn-primary ml-3" onClick={()=>auth.signOut()}>Выйти</button>
                         </div>
-                        :
-                        <NavLink to={LOGIN_ROUTE}>
-                            <button className="btn btn-primary">Войти</button>
-                        </NavLink>
+                        : null
                 }
             </div>
         </nav>
