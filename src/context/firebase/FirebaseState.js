@@ -6,7 +6,8 @@ import {ADD_NOTE, EDIT_NOTE, FETCH_NOTES, REMOVE_NOTE, SHOW_LOADER, SUCCESS_NOTE
 import {Context} from "../../index";
 import {useAuthState} from "react-firebase-hooks/auth";
 
-const url = process.env.REACT_APP_DB_URL;
+// const url = 'process.env.REACT_APP_DB_URL';
+const url = 'https://react-todo-login-default-rtdb.europe-west1.firebasedatabase.app/';
 
 export const FirebaseState = ({children}) => {
     const initialState = {
