@@ -27,7 +27,7 @@ export const Navbar = () => {
                     user ?
                         <div className="user">
                             <div className="user-avatar">
-                                <i className="bi bi-person"></i>
+                                {user.photoURL ? <img src={user.photoURL} alt=""/> : <i className="bi bi-person"></i>}
                             </div>
                             <div className="user-name">{user.displayName}</div>
                             <button className="btn btn-primary ml-3" onClick={()=>auth.signOut()}>Выйти</button>

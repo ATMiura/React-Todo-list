@@ -1,8 +1,8 @@
-import React, {useContext, useReducer} from 'react';
+import React, {useContext, useReducer, useState} from 'react';
 import axios from 'axios';
 import {FirebaseContext} from "./firebaseContext";
 import {firebaseReducer} from "./firebaseReducer";
-import {ADD_NOTE, EDIT_NOTE, FETCH_NOTES, REMOVE_NOTE, SHOW_LOADER} from "../types";
+import {ADD_NOTE, EDIT_NOTE, FETCH_NOTES, REMOVE_NOTE, SHOW_LOADER, SUCCESS_NOTE} from "../types";
 import {Context} from "../../index";
 import {useAuthState} from "react-firebase-hooks/auth";
 
@@ -16,13 +16,14 @@ export const FirebaseState = ({children}) => {
     const [state, dispatch] = useReducer(firebaseReducer, initialState);
     const {auth} = useContext(Context);
     const [user] = useAuthState(auth);
+    //const [status, setStatus] = useState(false)
 
     const showLoader = () => dispatch({type: SHOW_LOADER});
 
     const fetchNotes = async () => {
         showLoader();
         const res = await axios.get(`${url}/notes.json`);
-        const payload = Object.keys(res.data || {}).map(key=>{
+        const payload = Object.keys(res.data || {}).map(key => {
             return {
                 ...res.data[key],
                 id: key
@@ -35,22 +36,17 @@ export const FirebaseState = ({children}) => {
     const addNote = async title => {
         const note = {
             uid: user.uid,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
             title,
+            status: false,
             date: new Date().toJSON()
         };
-        try{
+        try {
             const res = await axios.post(`${url}/notes.json`, note);
-            const payload ={
-                ...note,
-                id: res.data.name
-            };
-
+            //id=res.data.name
             dispatch({
                 type: ADD_NOTE,
-                payload
-            })
+                payload: {...note, id: res.data.name}
+            });
         } catch (e) {
             throw new Error(e.message)
         }
@@ -64,12 +60,15 @@ export const FirebaseState = ({children}) => {
         })
     };
 
-    const successNoteList = async id => {
-        await axios.delete(`${url}/notes/${id}.json`);
-        dispatch({
-            type: REMOVE_NOTE,
-            payload: id
-        })
+    const statusNote = async (id, note) => {
+        //setStatus(status => !status);
+        const res = await axios.put(`${url}/notes/${id}.json`, note);
+        if (res.status === 200) {
+            dispatch({
+                type: SUCCESS_NOTE,
+                payload: {...note, status: !note.status}
+            });
+        }
     };
 
     const editNote = async title => {
@@ -80,9 +79,9 @@ export const FirebaseState = ({children}) => {
             title,
             date: new Date().toJSON()
         };
-        try{
+        try {
             const res = await axios.post(`${url}/notes.json`, note);
-            const payload ={
+            const payload = {
                 ...note,
                 id: res.data.name
             };
@@ -97,7 +96,17 @@ export const FirebaseState = ({children}) => {
     };
 
     return (
-        <FirebaseContext.Provider value={{showLoader, addNote, fetchNotes, successNoteList, removeNote, editNote, user, loading: state.loading, notes: state.notes }}>
+        <FirebaseContext.Provider value={{
+            showLoader,
+            addNote,
+            fetchNotes,
+            statusNote,
+            removeNote,
+            editNote,
+            user,
+            loading: state.loading,
+            notes: state.notes
+        }}>
             {children}
         </FirebaseContext.Provider>
     )

@@ -11,10 +11,10 @@ export const Form = () => {
     const submitHandler = event => {
         event.preventDefault();
 
-        if(value.trim()){
-            firebase.addNote(value.trim()).then(()=>{
+        if (value.trim()) {
+            firebase.addNote(value.trim()).then(() => {
                 alert.show('Заметка была создана', 'success');
-            }).catch(()=>{
+            }).catch(() => {
                 alert.show('Что-то пошло не так', 'danger');
             });
             setValue('');

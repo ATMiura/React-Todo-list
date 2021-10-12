@@ -6,7 +6,7 @@ import {Loader} from "../Components/Loader";
 
 export const Home = () => {
 
-    const {loading, user, notes, fetchNotes, successNoteList, editNote, removeNote} = useContext(FirebaseContext);
+    const {loading, user, notes, fetchNotes, statusNote, editNote, removeNote} = useContext(FirebaseContext);
 
     useEffect(() => {
         fetchNotes()
@@ -22,7 +22,10 @@ export const Home = () => {
             <Form />
             <hr />
 
-            { loading ? <Loader/> : <Notes user={user} notes={notes} onSuccess={successNoteList} onEdit={editNote} onRemove={removeNote} />}
+            { loading
+                ? <Loader/>
+                : <Notes user={user} notes={notes} onStatus={statusNote} onEdit={editNote} onRemove={removeNote} />
+            }
         </>
     )
 };
