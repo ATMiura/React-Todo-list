@@ -62,11 +62,11 @@ export const FirebaseState = ({children}) => {
 
     const statusNote = async (id, note) => {
         //setStatus(status => !status);
-        const res = await axios.put(`${url}/notes/${id}.json`, note);
+        const res = await axios.put(`${url}/notes/${id}.json`, {...note, status: !note.status});
         if (res.status === 200) {
             dispatch({
                 type: SUCCESS_NOTE,
-                payload: {...note, status: !note.status}
+                payload: res.data
             });
         }
     };
