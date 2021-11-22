@@ -7,7 +7,7 @@ import {Context} from "../../index";
 import {useAuthState} from "react-firebase-hooks/auth";
 
 // const url = 'process.env.REACT_APP_DB_URL';
-const url = 'https://react-todo-login-default-rtdb.europe-west1.firebasedatabase.app/';
+const url = 'https://react-todo-login-default-rtdb.europe-west1.firebasedatabase.app';
 
 export const FirebaseState = ({children}) => {
     const initialState = {
